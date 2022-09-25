@@ -23,14 +23,58 @@ module.exports = function (app) {
     console.log("REGISTER");
     console.log(register);
 
-    if(register== 403){
-        res.send(403,"Email already in use");
-    } 
-    else if (register.insertedId!=null){
-        res.send("User registered successfully");
+    if (register == 403) {
+      res.send(403, "Email already in use");
     }
-    else{
-        res.send(403,"Failure");
+    else if (register.insertedId != null) {
+      res.send("User registered successfully");
+    }
+    else {
+      res.send(403, "Failure");
+    }
+  });
+
+  app.put("/update", async (req, res) => {
+    try {
+      var update = await Services.update(req.body.email );
+      console.log("UPDATE");
+    console.log(update);
+
+    if (update == 403) {
+      res.send(403, "Email not found");
+    }
+    else if (update.insertedId != null) {
+      res.send("User updated successfully");
+    }
+    else {
+      res.send(403, "Failure");
+    }
+
+    } catch (e) {
+      console.log("Error in profileUpdate :", e);
+      return new Error(e);
+    }
+  });
+
+  app.put("/deleteUser", async (req, res) => {
+    try {
+      var deleteUser = await Services.deleteUser(req.body.email );
+      console.log("DELETE");
+    console.log(deleteUser);
+
+    if (update == 403) {
+      res.send(403, "Email not found");
+    }
+    else if (deleteUser.insertedId != null) {
+      res.send("User delete successfully");
+    }
+    else {
+      res.send(403, "Failure");
+    }
+
+    } catch (e) {
+      console.log("Error in Delete User :", e);
+      return new Error(e);
     }
   });
 };

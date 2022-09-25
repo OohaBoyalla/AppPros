@@ -23,22 +23,56 @@ async function register(body) {
   var res;
   try {
     //check if user with same email already exists
-    var checkExisting = await user.findOne({email: body.email});
+    var checkExisting = await user.findOne({ email: body.email });
 
-    if(!checkExisting){
-    const record = {
-      email: body.email,
-      password: body.password,
-      age: body.age,
-      imageurl: body.imageurl,
-      name: body.name
-    };
-    res = await user.insertOne(record);
-    console.log(res);
+    if (!checkExisting) {
+      const record = {
+        email: body.email,
+        password: body.password,
+        age: body.age,
+        imageurl: body.imageurl,
+        name: body.name
+      };
+      res = await user.insertOne(record);
+      console.log(res);
+    }
+    else {
+      return 403;
+    }
+  } catch (e) {
+    console.log(e);
   }
-  else{
-    return 403;
+
+  return res;
+}
+
+
+
+async function update(body) {
+  var res;
+  try {
+    const email = req.body.email;
+    if (email && email === "") {
+      return 403;
+    } else {
+      res = await Collection.updateOne({ email: email }, req.body);
+    }
+  } catch (e) {
+    console.log(e);
   }
+
+  return res;
+}
+
+async function deleteUser(body) {
+  var res;
+  try {
+    const email = req.body.email;
+    if (email && email === "") {
+      return 403;
+    } else {
+      res = await Collection.deleteOne({ email: email });
+    }
   } catch (e) {
     console.log(e);
   }
@@ -48,3 +82,6 @@ async function register(body) {
 
 exports.signIn = signIn;
 exports.register = register;
+exports.update = update;
+exports.deleteUser = deleteUser;
+
