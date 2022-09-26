@@ -77,4 +77,48 @@ module.exports = function (app) {
       return new Error(e);
     }
   });
+
+  app.post("/sendEmail", async (req, res) => {
+    try {
+      var emailSent = await service.sendEmail(req.body.email);
+      console.log("EMAIL SENT: "+emailSent);
+      if(emailSent == 200){
+        res.send(200, "Reset email sent successfully");
+      }
+      else if (emailSent == 403){
+        res.send(403, "No account with this email exists.");
+      }
+      else{
+        res.send(400, "Something went wrong.");
+      }
+
+    } catch (e) {
+      console.log("Error in Sending Email :", e);
+      res.send(400, "Error in Sending Email.");
+    }
+  }
+  
+  );
+
+  app.post("/resetPassword", async (req, res) => {
+    try {
+      var resetPassword = await service.resetPassword(req.body);
+
+      if(resetPassword == 200){
+        res.send(200, "Password reset successfully");
+      }
+      else if (resetPassword == 403){
+        res.send(403, "User doesnt exist or reset link doesnt exist");
+      }
+      else{
+        res.send(400, "Reset code doesnt match");
+      }
+
+    } catch (e) {
+      console.log("Error in Sending Email :", e);
+      res.send(400, "Error in Sending Email.");
+    }
+  }
+  
+  );
 };
