@@ -49,11 +49,13 @@ async function register(body) {
 async function update(body) {
   var res;
   try {
-    const email = req.body.email;
+    const email = body.email;
+    delete body.email;
+
     if (email && email === "") {
       return 403;
     } else {
-      res = await Collection.updateOne({ email: email }, req.body);
+      res = await user.updateOne({ email: email }, {$set:body});
     }
   } catch (e) {
     console.log(e);
@@ -65,11 +67,12 @@ async function update(body) {
 async function deleteUser(body) {
   var res;
   try {
-    const email = req.body.email;
+    const email = body;
     if (email && email === "") {
       return 403;
     } else {
-      res = await Collection.deleteOne({ email: email });
+      res = await user.deleteOne({ email: email });
+      
     }
   } catch (e) {
     console.log(e);

@@ -36,14 +36,14 @@ module.exports = function (app) {
 
   app.put("/update", async (req, res) => {
     try {
-      var update = await Services.update(req.body.email );
+      var update = await service.update(req.body );
       console.log("UPDATE");
     console.log(update);
 
     if (update == 403) {
       res.send(403, "Email not found");
     }
-    else if (update.insertedId != null) {
+    else if (update.modifiedCount > 0) {
       res.send("User updated successfully");
     }
     else {
@@ -58,14 +58,17 @@ module.exports = function (app) {
 
   app.put("/deleteUser", async (req, res) => {
     try {
-      var deleteUser = await Services.deleteUser(req.body.email );
+      var deleteUser = await service.deleteUser(req.body.email );
       console.log("DELETE");
     console.log(deleteUser);
 
-    if (update == 403) {
+    if(deleteUser == null){
+      res.send(404, "Email not found");
+    }
+    if (deleteUser.deletedCount == 0) {
       res.send(403, "Email not found");
     }
-    else if (deleteUser.insertedId != null) {
+    else if (deleteUser.deletedCount > 0) {
       res.send("User delete successfully");
     }
     else {
