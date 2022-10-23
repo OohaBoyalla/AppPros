@@ -34,3 +34,15 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
+          
+          - name: RapidAPI Testing Trigger
+  # You may pin to the exact commit or the version.
+  # uses: RapidAPI/gh-api-testing-trigger@b5adafb0971d0f6ee473dfe345886e46b3b0a2ac
+  uses: RapidAPI/gh-api-testing-trigger@v0.0.3
+  with:
+    # ID of the test to run
+    test: 
+    # The location the test will be executed in
+    location: # default is AWS-US-EAST-1
+    # The environment ID the test will run in
+    environment: # optional
