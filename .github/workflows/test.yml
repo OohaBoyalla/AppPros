@@ -46,3 +46,7 @@ jobs:
     location: # default is AWS-US-EAST-1
     # The environment ID the test will run in
     environment: # optional
+    jobs:
+  my_job:
+    name: deploy to staging
+    runs-on: ubuntu-18.04
