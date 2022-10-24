@@ -48,6 +48,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 
 import Login from './Components/loginPage.js'
 import SignUp from './Components/signup.js'
+import ProfilePage from './Components/profilePage'
 
 function App() {
   return (
@@ -68,6 +69,11 @@ function App() {
                     Sign up
                   </Link>
                 </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to={'/edit-profile'}>
+                    Profile Page
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>
@@ -79,6 +85,7 @@ function App() {
               <Route exact path="/" element={<Login />} />
               <Route path="/sign-in" element={<Login />} />
               <Route path="/sign-up" element={<SignUp />} />
+              <Route path="/edit-profile" element={<ProfilePage />} />
             </Routes>
           </div>
         </div>

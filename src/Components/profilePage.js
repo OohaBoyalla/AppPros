@@ -4,12 +4,22 @@ import email from "./../image/img2.jpg";
 import pass from "./../image/img3.png";
 import axios from 'axios';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import Swal from "sweetalert2";
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 
-export default class Signup extends Component {
+// useEffect(() => {
+//   const loggedInUser = localStorage.getItem("user");
+//   if (loggedInUser) {
+//     const foundUser = JSON.parse(loggedInUser);
+//   }
+// }, []);
+
+export default class ProfilePage extends Component {
+
   constructor(props) {
     super(props);
+
+    const loggedInUser = localStorage.getItem("user");
+    
     this.state = {
       name: "",
       age: "",
@@ -17,8 +27,23 @@ export default class Signup extends Component {
       password: "",
       imageurl:""
     };
+
+    if (loggedInUser) {
+      this.state = JSON.parse(loggedInUser);
+    } else {
+      window.location.href = '/sign-in';
+    }
+
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
   }
+
+  handleLogout (e) {
+    e.preventDefault();
+    localStorage.clear();
+    window.location.reload();
+  };
+  
   handleSubmit(e) {
     e.preventDefault();
     const { name, age, email, password , imageurl} = this.state;
@@ -29,7 +54,7 @@ export default class Signup extends Component {
       password: password,
       imageurl: imageurl
     }));
-    axios.post("http://localhost:6965/register",{
+    axios.put("http://localhost:6965/update",{
       name: name,
       email: email,
       age: age,
@@ -37,7 +62,14 @@ export default class Signup extends Component {
       imageurl: imageurl
     }).then(function (response) {
       console.log("--------------------------------")
-      window.location.href = '/sign-in';
+      localStorage.setItem("user", JSON.stringify({
+        name: name,
+        email: email,
+        age: age,
+        password: password,
+        imageurl: imageurl
+      }));
+      window.location.reload();
     })
     .catch(function (error) {
       console.log(error);
@@ -51,40 +83,38 @@ export default class Signup extends Component {
              <div>
                <div className="imgs">
                  <div className="container-image">
-                   <img src={profile} alt="profile" className="profile"/>
+                   <img src={this.state.imageurl} alt="profile" className="profile"/>
                  </div>
       
                </div>
                <div>
-                 <h1>Signup</h1>
+                 <h1>Profile</h1>
                  <div>
                    <img src={email} alt="name" className="email"/>
-                   <input type="text" placeholder="Name" className="name" onChange={(e) => this.setState({ name : e.target.value })}/>
+                   <input type="text" value={this.state.name} placeholder="Name" className="name" onChange={(e) => this.setState({ name : e.target.value })}/>
                  </div><br></br>
                  <div>
                    <img src={email} alt="email" className="email"/>
-                   <input type="text" placeholder="Email" className="name" onChange={(e) => this.setState({ email : e.target.value })}/>
+                   <input type="text" value={this.state.email} placeholder="Email" className="name" onChange={(e) => this.setState({ email : e.target.value })}/>
                  </div><br></br>
                  <div>
                    <img src={email} alt="age" className="email"/>
-                   <input type="text" placeholder="Age" className="name" onChange={(e) => this.setState({ age : e.target.value })}/>
-                 </div><br></br>
+                   <input type="text" value={this.state.age} placeholder="Age" className="name" onChange={(e) => this.setState({ age : e.target.value })}/>
+                 </div> <br></br>
                  <div>
                    <img src={email} alt="image" className="email"/>
-                   <input type="text" placeholder="Profile Image Url" className="name" onChange={(e) => this.setState({ imageurl : e.target.value })}/>
+                   <input type="text" value={this.state.imageurl} placeholder="Profile Image Url" className="name" onChange={(e) => this.setState({ imageurl : e.target.value })}/>
                  </div>
                  <div className="second-input">
                    <img src={pass} alt="pass" className="email"/>
-                   <input type="password" placeholder="Password" className="name" onChange={(e) => this.setState({ password : e.target.value })}/>
+                   <input type="password" value={this.state.password} placeholder="Password" className="name" onChange={(e) => this.setState({ password : e.target.value })}/>
                  </div>
                 <div className="login-button">
-                <button type="submit">Register</button>
+                <button type="submit">Update</button>
+                </div><br></br>
+                <div>
+                  <button onClick={this.handleLogout}>Logout</button>
                 </div>
-                <br></br>
-                  <p className="link">
-                    <a>Already have account?</a><Link className="nav-link" to={'/sign-in'}>Log in</Link>
-                  </p>
-                 
        
                </div>
              </div>

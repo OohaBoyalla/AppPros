@@ -5,6 +5,9 @@ import pass from "./../image/img3.png";
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import axios from 'axios';
 import React, { Component } from "react";
+import { Navigate, useNavigate  } from 'react-router-dom';
+
+
 
 export default class Login extends Component {
   constructor(props) {
@@ -16,7 +19,9 @@ export default class Login extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
   handleSubmit(e) {
+    //let navigate = useNavigate();
     e.preventDefault();
+    
     const { email, password } = this.state;
     console.log(JSON.stringify({
       email: email, password: password
@@ -25,6 +30,10 @@ export default class Login extends Component {
       email: email, password: password
     }).then(function (response) {
       console.log("response");
+      localStorage.setItem("user", JSON.stringify(response.data));
+      window.location.href = '/edit-profile';
+      //navigate("/edit-profile");
+      //window.location.reload();
     })
     .catch(function (error) {
       console.log(error);
@@ -42,7 +51,6 @@ export default class Login extends Component {
               <img src={profile} alt="profile" className="profile"/>
 
             </div>
-
 
           </div>
           <div>
